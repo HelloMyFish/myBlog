@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    username: root
+    password: admin
+    url: jdbc:mysql://localhost:3306/myblog?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 1000
+
+
+#mybatis:
+#  mapper-locations: mapping/*Mapper.xml,mapping/ext/*Mapper.xml
+#mybatis:
+#  mapper-locations: classpath:mapping/*Mapper.xml,mapping/ext/*Mapper.xml
+
+logging:
+  level:com.example.demo.dao:debug
+
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除字段值 3.3.0开始支持，详情看下面。 此处字段和java字段保持一致
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      id-type: ASSIGN_ID #设置主键策略
+  mapper-locations: classpath:mapping/*Mapper.xml,mapping/ext/*Mapper.xml
+  configuration: ##打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 是否启用Swagger
+swagger:
+  enable: true
+

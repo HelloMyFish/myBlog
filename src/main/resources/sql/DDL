@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS SYS_user(
+     id BIGINT PRIMARY KEY,
+     user_name VARCHAR(20) NOT NULL COMMENT '用户名',
+     user_email VARCHAR(30) COMMENT '用户邮箱',
+     user_mobile VARCHAR(12) COMMENT '用户手机号',
+     user_location VARCHAR(50) COMMENT '用户地址',
+     is_deleted CHAR(1) NOT NULL DEFAULT '0' COMMENT '是否被删除。默认被删除',
+     create_user_id BIGINT NOT NULL COMMENT '创建人user_id',
+     create_time datetime NOT NULL COMMENT '创建时间',
+     update_user_id BIGINT NOT NULL COMMENT '更新人user_id',
+     update_time datetime NOT NULL COMMENT '更新人时间'
+) COMMENT '用户信息表';
