@@ -142,6 +142,12 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <version>3.3.2</version>
         </dependency>
+        <!-- 添加模板引擎        -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.30</version>
+        </dependency>
         <!-- 数据校验       -->
         <dependency>
             <groupId>org.hibernate</groupId>

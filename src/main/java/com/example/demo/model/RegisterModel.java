@@ -42,6 +42,17 @@ public class RegisterModel {
     @ApiModelProperty(value = "家庭住址")
     private String location;
 
+    @ApiModelProperty(hidden = true)
+    private String ipAddress;
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -108,6 +119,7 @@ public class RegisterModel {
                 ", email='" + email + '\'' +
                 ", sex='" + sex + '\'' +
                 ", location='" + location + '\'' +
+                ", ipAddress='" + ipAddress + '\'' +
                 '}';
     }
 }

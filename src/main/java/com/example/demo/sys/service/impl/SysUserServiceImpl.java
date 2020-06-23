@@ -1,23 +1,23 @@
-package com.example.demo.service.impl;
+package com.example.demo.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.demo.dao.SysUserMapper;
-import com.example.demo.entity.SysAccount;
-import com.example.demo.entity.SysUser;
-import com.example.demo.service.SysUserService;
+import com.example.demo.sys.entity.SysUser;
+import com.example.demo.sys.mapper.SysUserMapper;
+import com.example.demo.sys.service.ISysUserService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 /**
- * @Title:
- * @Package
- * @Description:
- * @Author gyf
- * @Date 2020/6/20 12:56
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author gyf
+ * @since 2020-06-21
  */
 @Service
-public class SysUserServiceImpl implements SysUserService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
 

@@ -43,7 +43,7 @@ public class Swagger2 {
 //    private boolean enable = false;
     @Bean
     public Docket createRestApi() {
-        System.out.println("生成SWAGGER。。。。。。。。。。。");
+        System.out.println("=============SWAGGER注册中=============");
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
         tokenPar.name("token").description("令牌")

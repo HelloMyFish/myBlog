@@ -1,32 +1,31 @@
-package com.example.demo.service.impl;
+package com.example.demo.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
-import com.baomidou.mybatisplus.core.injector.methods.SelectOne;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.example.demo.constant.CommonEnum;
-import com.example.demo.constant.Constant;
+import com.example.demo.config.exception.LoginException;
+import com.example.demo.constant.DeletedConstant;
 import com.example.demo.constant.ConstantCode;
-import com.example.demo.dao.SysAccountMapper;
-import com.example.demo.dao.SysUserMapper;
-import com.example.demo.entity.SysAccount;
-import com.example.demo.entity.SysUser;
 import com.example.demo.model.RegisterModel;
-import com.example.demo.model.ResultData;
-import com.example.demo.service.LoginService;
+import com.example.demo.sys.entity.SysAccount;
+import com.example.demo.sys.entity.SysUser;
+import com.example.demo.sys.mapper.SysAccountMapper;
+import com.example.demo.sys.mapper.SysUserMapper;
+import com.example.demo.sys.service.ILoginService;
 import com.example.demo.util.encryption.MD5Util;
-import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author gyf
  * @date 2020/6/20 18:29
  */
-public class LoginServiceImpl implements LoginService {
+@Service
+public class LoginServiceImpl implements ILoginService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
     @Autowired
     private SysAccountMapper sysAccountMapper;
@@ -39,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
                 .eq(SysAccount::getUserName, userName);
         SysAccount sysAccount = sysAccountMapper.selectOne(wrapper);
         if(sysAccount==null){
-            throw new RuntimeException("不存在此账号，请重试!");
+            throw new LoginException("不存在此账号，请重试!");
         }
         String salt = sysAccount.getSalt();
         String md5Password = MD5Util.md5(password + salt);
@@ -49,7 +48,7 @@ public class LoginServiceImpl implements LoginService {
             r.setMsg("欢迎您，登陆成功!");
             return r;
         }else{
-            throw new RuntimeException("登陆失败!");
+            throw new LoginException("登陆失败!");
         }
     }
     /**
@@ -73,22 +72,26 @@ public class LoginServiceImpl implements LoginService {
         sysUser.setTrueName(registerModel.getTrueName());
         sysUser.setUserEmail(registerModel.getEmail());
         sysUser.setUserMobile(registerModel.getMobile());
-        sysUser.setIsDeleted(CommonEnum.NOT_DELETED.value());
-        sysUser.setCreateTime(new Date());
+        sysUser.setIsDeleted(DeletedConstant.NOT_DELETED.value());
+        sysUser.setCreateTime(LocalDateTime.now());
         sysUser.setCreateUserId(1L);
-        sysUser.setUpdateTime(new Date());
+        sysUser.setUpdateTime(LocalDateTime.now());
         sysUser.setUpdateUserId(1L);
         sysUserMapper.insert(sysUser);
 
         //向账户表插入数据
         SysAccount insertAccount = new SysAccount();
-        insertAccount.setSalt(MD5Util.salt());
-        insertAccount.setMd5Password(MD5Util.md5(registerModel.getPassword()+sysAccount.getSalt()));
+        String salt = MD5Util.salt();
+        insertAccount.setSalt(salt);
+        insertAccount.setMd5Password(MD5Util.md5(registerModel.getPassword()+salt));
         insertAccount.setUserName(registerModel.getUserName());
-        insertAccount.setCreateTime(new Date());
+        insertAccount.setLastLoginIp(registerModel.getIpAddress());
+        insertAccount.setLastLoginTime(LocalDateTime.now());
+        insertAccount.setCreateTime(LocalDateTime.now());
         insertAccount.setCreateUserId(1L);
-        insertAccount.setUpdateTime(new Date());
+        insertAccount.setUpdateTime(LocalDateTime.now());
         insertAccount.setUpdateUserId(1L);
+        insertAccount.setIsDeleted(DeletedConstant.NOT_DELETED.value());
         insertAccount.setUserId(sysUser.getId());
         sysAccountMapper.insert(insertAccount);
         return new R().setCode(ConstantCode.SUCCESS_CODE.value());
