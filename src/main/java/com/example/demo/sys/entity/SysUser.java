@@ -21,9 +21,6 @@ public class SysUser extends Model<SysUser> {
 
     private Long id;
 
-    @ApiModelProperty(value = "用户名")
-    private String userName;
-
     @ApiModelProperty(value = "真实姓名")
     private String trueName;
 
@@ -61,13 +58,7 @@ public class SysUser extends Model<SysUser> {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
     public String getTrueName() {
         return trueName;
     }
@@ -144,21 +135,21 @@ public class SysUser extends Model<SysUser> {
         return this.id;
     }
 
+
     @Override
     public String toString() {
         return "SysUser{" +
-            "id=" + id +
-            ", userName=" + userName +
-            ", trueName=" + trueName +
-            ", userSex=" + userSex +
-            ", userEmail=" + userEmail +
-            ", userMobile=" + userMobile +
-            ", userLocation=" + userLocation +
-            ", isDeleted=" + isDeleted +
-            ", createUserId=" + createUserId +
-            ", createTime=" + createTime +
-            ", updateUserId=" + updateUserId +
-            ", updateTime=" + updateTime +
-        "}";
+                "id=" + id +
+                ", trueName='" + trueName + '\'' +
+                ", userSex='" + userSex + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userMobile='" + userMobile + '\'' +
+                ", userLocation='" + userLocation + '\'' +
+                ", isDeleted='" + isDeleted + '\'' +
+                ", createUserId=" + createUserId +
+                ", createTime=" + createTime +
+                ", updateUserId=" + updateUserId +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

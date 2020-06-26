@@ -3,22 +3,24 @@ package com.example.demo.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.example.demo.config.exception.LoginException;
-import com.example.demo.constant.DeletedConstant;
-import com.example.demo.constant.ConstantCode;
-import com.example.demo.model.RegisterModel;
+import com.example.demo.model.ResultData;
 import com.example.demo.sys.entity.SysAccount;
 import com.example.demo.sys.entity.SysUser;
 import com.example.demo.sys.mapper.SysAccountMapper;
 import com.example.demo.sys.mapper.SysUserMapper;
+import com.example.demo.sys.model.LoginInputModel;
 import com.example.demo.sys.service.ILoginService;
 import com.example.demo.util.encryption.MD5Util;
-
-import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author gyf
@@ -27,74 +29,52 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements ILoginService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private static final DateTimeFormatter FORMATTER_DAY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final int TODAY_MAX_LOGIN_TIMES = 3;
     @Autowired
     private SysAccountMapper sysAccountMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Transactional(noRollbackFor = LoginException.class)
     @Override
-    public R login(String userName, String password) {
+    public ResultData login(LoginInputModel model,HttpServletRequest request) {
         LambdaQueryWrapper<SysAccount> wrapper = new LambdaQueryWrapper<SysAccount>()
-                .select(SysAccount::getMd5Password, SysAccount::getSalt)
-                .eq(SysAccount::getUserName, userName);
+                .eq(SysAccount::getUserName, model.getUserName());
         SysAccount sysAccount = sysAccountMapper.selectOne(wrapper);
         if(sysAccount==null){
             throw new LoginException("不存在此账号，请重试!");
         }
+        if (sysAccount.getLastLoginTime()!=null && LocalDateTime.now().toLocalDate().equals(sysAccount.getLastLoginTime().toLocalDate())
+                && sysAccount.getTodayLoginFailTimes()!=null && sysAccount.getTodayLoginFailTimes()>TODAY_MAX_LOGIN_TIMES) {
+            throw new LoginException("今日登陆错误次数超过3次，请明日再试！");
+        }
         String salt = sysAccount.getSalt();
-        String md5Password = MD5Util.md5(password + salt);
+        String md5Password = MD5Util.md5(model.getPassword() + salt);
         if(md5Password.equals(sysAccount.getMd5Password())){
-            R r = new R();
-            r.setCode(ConstantCode.SUCCESS_CODE.value());
-            r.setMsg("欢迎您，登陆成功!");
-            return r;
+            sysAccount.setLastLoginTime(LocalDateTime.now());
+            sysAccount.setLastLoginIp(model.getIpAddress());
+            sysAccount.setTodayLoginFailTimes(0);
+            sysAccountMapper.updateById(sysAccount);
+            Long userId = sysAccount.getUserId();
+            SysUser sysUser = sysUserMapper.selectById(userId);
+            if(sysUser==null){
+                throw new LoginException("用户不存在！");
+            }
+            HttpSession session = request.getSession();
+            session.setAttribute("userInfo",sysUser);
+//            R r = new R();
+//            r.setCode(ConstantCode.SUCCESS_CODE.value());
+//            r.setMsg("欢迎您，登陆成功!");
+            return ResultData.ofSuccess();
         }else{
-            throw new LoginException("登陆失败!");
+            sysAccount.setLastLoginTime(LocalDateTime.now());
+            int tryTimes = TODAY_MAX_LOGIN_TIMES - sysAccount.getTodayLoginFailTimes();
+            sysAccount.setTodayLoginFailTimes(sysAccount.getTodayLoginFailTimes() + 1);
+            sysAccountMapper.updateById(sysAccount);
+            throw new LoginException("密码错误！今日剩余尝试次数" + tryTimes);
         }
     }
-    /**
-    　　* @author gyf
-    　　* @Description 实现注册功能
-    　　* @param ${tags}
-    　　* @return ${return_type}
-    　　* @throws
-    　　* @date 2020/6/20 22:37
-    */
-    @Override
-    public R register(RegisterModel registerModel){
-        String userName = registerModel.getUserName();
-        LambdaQueryWrapper<SysAccount> wrapper = new LambdaQueryWrapper<SysAccount>().select(SysAccount::getId).eq(SysAccount::getUserName, userName);
-        SysAccount sysAccount = sysAccountMapper.selectOne(wrapper);
-        if(sysAccount!=null){
-            throw new RuntimeException("当前用户名已被注册！");
-        }
-        //向用户表插入数据
-        SysUser sysUser = new SysUser();
-        sysUser.setTrueName(registerModel.getTrueName());
-        sysUser.setUserEmail(registerModel.getEmail());
-        sysUser.setUserMobile(registerModel.getMobile());
-        sysUser.setIsDeleted(DeletedConstant.NOT_DELETED.value());
-        sysUser.setCreateTime(LocalDateTime.now());
-        sysUser.setCreateUserId(1L);
-        sysUser.setUpdateTime(LocalDateTime.now());
-        sysUser.setUpdateUserId(1L);
-        sysUserMapper.insert(sysUser);
 
-        //向账户表插入数据
-        SysAccount insertAccount = new SysAccount();
-        String salt = MD5Util.salt();
-        insertAccount.setSalt(salt);
-        insertAccount.setMd5Password(MD5Util.md5(registerModel.getPassword()+salt));
-        insertAccount.setUserName(registerModel.getUserName());
-        insertAccount.setLastLoginIp(registerModel.getIpAddress());
-        insertAccount.setLastLoginTime(LocalDateTime.now());
-        insertAccount.setCreateTime(LocalDateTime.now());
-        insertAccount.setCreateUserId(1L);
-        insertAccount.setUpdateTime(LocalDateTime.now());
-        insertAccount.setUpdateUserId(1L);
-        insertAccount.setIsDeleted(DeletedConstant.NOT_DELETED.value());
-        insertAccount.setUserId(sysUser.getId());
-        sysAccountMapper.insert(insertAccount);
-        return new R().setCode(ConstantCode.SUCCESS_CODE.value());
-    }
 
 }

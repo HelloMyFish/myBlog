@@ -1,6 +1,7 @@
 package com.example.demo.sys.controller;
 
 
+import com.example.demo.model.ResultData;
 import com.example.demo.sys.entity.SysUser;
 import com.example.demo.sys.service.ISysUserService;
 import io.swagger.annotations.ApiOperation;
@@ -34,9 +35,10 @@ public class SysUserController {
 
     @ApiOperation(value = "查询用户",notes = "",httpMethod = "GET")
     @GetMapping(value = "query-user")
-    public String queryUser(@RequestParam(value = "userName") @ApiParam(value = "userName",required = true) String userName){
+    public ResultData<SysUser> queryUser(@RequestParam(value = "userName") @ApiParam(value = "userName",required = true) String userName){
         LOGGER.info("userName:{}",userName);
-        return Optional.ofNullable(sysUserService.queryUserByName(userName)).orElse(new SysUser()).toString();
+        SysUser sysUser = Optional.ofNullable(sysUserService.queryUserByName(userName)).orElse(new SysUser());
+        return ResultData.ofSuccess(sysUser);
     }
 
 }

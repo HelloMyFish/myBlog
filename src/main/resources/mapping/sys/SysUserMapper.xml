@@ -5,7 +5,6 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.demo.sys.entity.SysUser">
         <id column="id" property="id" />
-        <result column="user_name" property="userName" />
         <result column="true_name" property="trueName" />
         <result column="user_sex" property="userSex" />
         <result column="user_email" property="userEmail" />
@@ -20,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_name, true_name, user_sex, user_email, user_mobile, user_location, is_deleted, create_user_id, create_time, update_user_id, update_time
+        id, true_name, user_sex, user_email, user_mobile, user_location, is_deleted, create_user_id, create_time, update_user_id, update_time
     </sql>
     <select id="queryUserByName" resultMap="BaseResultMap" parameterType="string">
         select <include refid="Base_Column_List"/>

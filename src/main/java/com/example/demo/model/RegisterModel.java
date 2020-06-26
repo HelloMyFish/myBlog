@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  */
 @ApiModel(value = "注册功能入参实体类", description="注册功能入参实体类")
 public class RegisterModel {
-    @Size(min = 6,max = 12)
+    @Size(min = 5,max = 12)
     @ApiModelProperty(value = "用户名",required = true)
     private String userName;
 

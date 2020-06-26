@@ -15,7 +15,7 @@ import java.util.List;
  * @author gyf
  * @date 2020/6/21 16:22
  */
-@RestController
+@RestController(value = "test")
 public class TestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestController.class);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

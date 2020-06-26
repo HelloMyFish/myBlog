@@ -53,7 +53,7 @@ public class CodeGenerator {
         System.out.println("路径:{}"+projectPath);
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("gyf");
-//        gc.setFileOverride(true);
+        gc.setFileOverride(true);
         //直接通过对象直接调用DAO方法
         gc.setActiveRecord(true);
         gc.setOpen(false);
