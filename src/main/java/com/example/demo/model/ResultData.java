@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.constant.BusinessErrorCode;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author gyf
@@ -25,12 +26,12 @@ public class ResultData<T> {
     /**
      * 错误码
      */
-    private String code;
+    private String code = String.valueOf(HttpStatus.OK.value());
 
     /**
      * 错误描述
      */
-    private String msg;
+    private String msg = "操作成功！";
 
 
 

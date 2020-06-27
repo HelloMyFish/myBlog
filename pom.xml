@@ -35,7 +35,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -158,7 +161,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.mybatis.generator</groupId>-->
 <!--            <artifactId>mybatis-generator</artifactId>-->
@@ -177,10 +184,23 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+        <!-- ThymeLeaf 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+<!--                <version>2.0.4.RELEASE</version>-->
+                <configuration>
+                    <fork>false</fork>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

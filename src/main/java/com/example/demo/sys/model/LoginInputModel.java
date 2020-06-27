@@ -10,9 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value="登陆入参对象", description="")
 public class LoginInputModel {
 
-    @ApiModelProperty(value = "账户")
+    @ApiModelProperty(value = "账户",required = true)
     private String userName;
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "密码",required = true)
     private String password;
     @ApiModelProperty(value = "IP地址")
     private String ipAddress;
