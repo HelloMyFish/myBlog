@@ -1,6 +1,6 @@
 package com.example.demo.config.time;
 
-import com.example.demo.modul.tb.service.IA15ToDcProgramService;
+import com.example.demo.module.tb.service.IA15ToDcProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;

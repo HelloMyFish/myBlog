@@ -1,8 +1,8 @@
 package com.example.demo.security;
 
 import com.example.demo.model.ResultData;
-import com.example.demo.modul.sys.entity.SysUser;
-import com.example.demo.modul.sys.service.ISysUserService;
+import com.example.demo.module.sys.entity.SysUser;
+import com.example.demo.module.sys.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
