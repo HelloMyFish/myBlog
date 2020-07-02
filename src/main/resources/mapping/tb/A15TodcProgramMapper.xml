@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.tb.mapper.A15ToDcProgramMapper">
+<mapper namespace="com.example.demo.modul.tb.mapper.A15ToDcProgramMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.example.demo.tb.entity.A15ToDcProgram">
+    <resultMap id="BaseResultMap" type="com.example.demo.modul.tb.entity.A15ToDcProgram">
         <id column="id" property="id" />
         <result column="account_id" property="accountId" />
         <result column="account_name" property="accountName" />
