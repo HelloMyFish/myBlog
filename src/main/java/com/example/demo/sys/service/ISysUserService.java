@@ -20,4 +20,6 @@ public interface ISysUserService extends IService<SysUser> {
     ResultData confirmEmail(Long userId, String email);
 
     ResultData sendEmail(Long userId);
+
+    SysUser queyrByusername(String username);
 }

@@ -30,20 +30,21 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         logger.info("=====拦截器注册====");
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/sys/**","/test/**")
-                .excludePathPatterns("/sys/login/execute-login",
-                        "/sys/login/to_login",
-                        "/",
-                        "/js/**",
-                        "/css/**",
-                        "/images/**",
-                        "/templates/**");
+//        registry.addInterceptor(new LoginInterceptor())
+//                .addPathPatterns("/sys/**","/test/**")
+//                .excludePathPatterns("/sys/login/execute-login",
+//                        "/sys/login/to_login",
+//                        "/",
+//                        "/js/**",
+//                        "/css/**",
+//                        "/images/**",
+//                        "/templates/**");
     }
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/sys/login/to_login").setViewName("login");
         registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
     }
     /**
      * 配置静态访问资源

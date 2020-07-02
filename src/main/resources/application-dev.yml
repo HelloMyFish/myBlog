@@ -41,3 +41,11 @@ swagger:
   enable: true
 
 
+# 邮箱配置
+mail:
+  smtp:
+    auth: true
+    host: smtp.qq.com
+    port: 587
+    user: 915320256@qq.com
+    password: exjfvckhidppbcce

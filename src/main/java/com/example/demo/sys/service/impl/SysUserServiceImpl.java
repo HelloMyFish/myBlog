@@ -96,6 +96,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
+    @Override
+    public SysUser queyrByUsername(String username) {
+        if (StringUtils.isNotBlank(username)) {
+            
+        }
+        return null;
+    }
+
     public SysUser addSysUser(SysUser sysUser){
         return null;
     }
